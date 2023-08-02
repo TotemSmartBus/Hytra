@@ -20,22 +20,3 @@ npm install
 npm run serve
 ```
 Open the http://localhost:8085
-
-![system](./pic/system_look.png)
-
-
-## Visualization module
-* Map view
-
-![map](./pic/vehicle.png)
-* Radar view
-
-![radar](./pic/Bus%20Arrival.png)
-* Heap map view
-
-![heap](./pic/Bus%20Speed%20Chart2.png)
-* Timeline view
-
-![timeline1](./pic/Bus%20Route%20Chart.png)
-
-![timeline2](./pic/Bus%20Trip%20Chart.png)
