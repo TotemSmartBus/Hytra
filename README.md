@@ -43,7 +43,9 @@ Hytra is able to efficiently answer four typical types of queries now:
 
 ## Bus Trajectory Visualization
 
-![image-20230802180755150](https://github.com/TotemSmartBus/Hytra/blob/main/platform.png)
+Link of the bus trajectory visualization platform: http://sheng.whu.edu.cn/bus/
+
+[![transitnet](https://github.com/TotemSmartBus/Hytra/blob/main/platform.png)](http://sheng.whu.edu.cn/bus/)
 
 ## Getting Started
 
