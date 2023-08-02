@@ -11,7 +11,7 @@ A Hybrid Data System Called Hytra for Conducting Fast Real-time and Historical Q
 
 ## Relationships Between Projects
 
-![image-20230802181152370](C:\Users\Ria\AppData\Roaming\Typora\typora-user-images\image-20230802181152370.png)
+![image-20230802181152370](https://github.com/TotemSmartBus/Hytra/blob/main/relationships.png)
 
 - Hytra-Interface is a dependency project for the underlying LSM-tree index used by transitnet. It needs to be packaged into a jar file and placed under the lib folder of transitnet.
 - Hytra-Interface and Hytra-LSM use socket to communicate.
@@ -43,7 +43,7 @@ Hytra is able to efficiently answer four typical types of queries now:
 
 ## Bus Trajectory Visualization
 
-![image-20230802180755150](C:\Users\Ria\AppData\Roaming\Typora\typora-user-images\image-20230802180755150.png)
+![image-20230802180755150](https://github.com/TotemSmartBus/Hytra/blob/main/platform.png)
 
 ## Getting Started
 
