@@ -88,16 +88,25 @@ Hytra-Interface provides simple APIs for query processing.
 
 ### Query Types
 
-#### 1) Historical range query (in Hytra-Interface)
+#### 1) Real-time range query
 
-```
+```java
 HistoricalRange.generateQr(params, s_length, t_length);
 HistoricalRange.hytra(planes);
 ```
 
 The historical range query is used to retrive trajectories passing through a rectangular area and a period of time.
 
-#### 2) Real-time kNN query (in Transitnet)
+#### 2) Historical range query
+
+```java
+HistoricalRange.generateQr(params, s_length, t_length);
+HistoricalRange.hytra(planes);
+```
+
+The historical range query is used to retrive trajectories passing through a rectangular area in a period of time.
+
+#### 3) Real-time kNN query
 
 ```java
 int k = 20;
@@ -106,7 +115,7 @@ realtimeKNNExpService.getTopKTrips(k);
 
 The real-time kNN query is used to retrieve the k highest ranked trajectories based on the similarity to the query trajectory. 
 
-#### 3) Historical kNN query (in Transitnet)
+#### 4) Historical kNN query
 
 ```java
 int k = 10;
@@ -117,5 +126,6 @@ The historical kNN query is used to retrive the k highest ranked trajectories ba
 
 ## Future Directions
 
-1. Integrate Hytra's tajectory queries into the visualization platform to support interactive transport analysis.
-2. Extend Hytra to memory-constrained mobile devices.
+1. Support other advanced trajectory queries.
+2. Develop a distributed version of Hytra for extremely large volumes of trajectory data.
+
