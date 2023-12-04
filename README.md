@@ -6,7 +6,7 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 
 - Hytra-Interface: the global encoding engine of Hytra.
 - Hytra-LSM: the hybrid storage engine of Hytra.
-- transitnet: the back-end of the real-time bus trajectory data visualization platform, including Real-time Range Query, Historical Range Query, Real-time kNN Query, and Historical kNN Query of the Unified Search Engine.
+- transitnet: the back-end of the real-time bus trajectory data visualization platform and also the unified search engine of Hytra, where we implement the real-time range query, historical range query, real-time kNN query, and historical kNN query.
 - transitnet-vue: the front-end of the real-time bus trajectory data visualization platform.
 
 ## Relationships Between Projects
