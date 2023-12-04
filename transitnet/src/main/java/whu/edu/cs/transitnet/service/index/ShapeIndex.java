@@ -4,6 +4,8 @@ package whu.edu.cs.transitnet.service.index;
 import com.github.davidmoten.guavamini.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import whu.edu.cs.transitnet.dao.ShapesDao;
 import whu.edu.cs.transitnet.dao.TripsDao;
@@ -54,24 +56,28 @@ public class ShapeIndex {
     }
 
 
-    // resolution = 6 时创建 txt 文件的操作
+    /**
+     * resolution = 6 时创建 txt 文件的操作
+     */
     @PostConstruct
     public void init() {
 
+        // 勿删
 //        if(!indexEnable) {
 //            System.out.println("[SHAPEINDEX] Index is not enabled, skipped.");
 //            return;
 //        }
+        String constructionDate="20230918";
 
         int resolution = hytraEngineManager.getParams().getResolution();
-        File shapeGridFile = new File("./src/main/" + "shape_grid_" + resolution + ".txt");
-        File gridShapeFile = new File("./src/main/" + "grid_shape_" + resolution + ".txt");
-        File shapeTripFile = new File("./src/main/" + "shape_trip"+ ".txt");
+        Resource shapeGridResource = new ClassPathResource("indexFiles/shape_grid_6_20230918.txt");
+        Resource gridShapeResource = new ClassPathResource("indexFiles/grid_shape_6_20230918.txt");
+        Resource shapeTripResource = new ClassPathResource("indexFiles/shape_trip_20230918.txt");
 
-        if (shapeGridFile.exists() && gridShapeFile.exists() && shapeTripFile.exists()) {
+        if (shapeGridResource.exists() && gridShapeResource.exists() && shapeTripResource.exists()) {
             // 读取文件
             System.out.println("======================");
-            System.out.println("[SHAPEINDEX] FILE EXISTS...");
+            System.out.println("[SHAPEINDEX] FILE EXISTS... now version 2023/11/21 14:45");
             System.out.println("======================");
             System.out.println("[SHAPEINDEX] Start Deserializing HashMap..");
 
@@ -79,31 +85,28 @@ public class ShapeIndex {
 
 
             try {
-                FileInputStream fileInput1 = new FileInputStream(
-                        shapeGridFile);
-                FileInputStream fileInput2 = new FileInputStream(
-                        gridShapeFile);
-                FileInputStream fileInput3 = new FileInputStream(
-                        shapeTripFile);
+                InputStream shapeGridStream = shapeGridResource.getInputStream();
+                InputStream gridShapeStream = gridShapeResource.getInputStream();
+                InputStream shapeTripStream = shapeTripResource.getInputStream();
 
 
                 ObjectInputStream objectInput1
-                        = new ObjectInputStream(fileInput1);
+                        = new ObjectInputStream(shapeGridStream);
                 ObjectInputStream objectInput2
-                        = new ObjectInputStream(fileInput2);
+                        = new ObjectInputStream(gridShapeStream);
                 ObjectInputStream objectInput3
-                        = new ObjectInputStream(fileInput3);
+                        = new ObjectInputStream(shapeTripStream);
 
                 shapeGridList = (HashMap)objectInput1.readObject();
                 gridShapeList = (HashMap)objectInput2.readObject();
                 shapeTripList = (HashMap)objectInput3.readObject();
 
                 objectInput1.close();
-                fileInput1.close();
+                shapeGridStream.close();
                 objectInput2.close();
-                fileInput2.close();
+                gridShapeStream.close();
                 objectInput3.close();
-                fileInput3.close();
+                shapeTripStream.close();
             }
 
             catch (IOException obj1) {
@@ -122,20 +125,6 @@ public class ShapeIndex {
             System.out.println("======================");
             System.out.println("[SHAPEINDEX] Deserializing HashMap DONE!");
             System.out.println("[SHAPEINDEX] Deserializing time: " + (endtime - starttime) / 1000 + "s");
-
-
-            // Displaying content in "newHashMap.txt" using
-            // Iterator
-//            Set set = shapeGridList.entrySet();
-//            Iterator iterator = set.iterator();
-//
-//            while (iterator.hasNext()) {
-//                Map.Entry entry = (Map.Entry)iterator.next();
-//
-//                System.out.print("key : " + entry.getKey()
-//                        + " & Value : ");
-//                System.out.println(entry.getValue());
-//            }
 
         } else {
             System.out.println("=============================");
@@ -194,39 +183,39 @@ public class ShapeIndex {
             }
 
             // try catch block
-            try {
-                FileOutputStream myFileOutStream1
-                        = new FileOutputStream(shapeGridFile);
-                FileOutputStream myFileOutStream2
-                        = new FileOutputStream(gridShapeFile);
-                FileOutputStream myFileOutStream3
-                        = new FileOutputStream(shapeTripFile);
-
-                ObjectOutputStream myObjectOutStream1
-                        = new ObjectOutputStream(myFileOutStream1);
-                ObjectOutputStream myObjectOutStream2
-                        = new ObjectOutputStream(myFileOutStream2);
-                ObjectOutputStream myObjectOutStream3
-                        = new ObjectOutputStream(myFileOutStream3);
-
-                myObjectOutStream1.writeObject(shapeGridList);
-                myObjectOutStream2.writeObject(gridShapeList);
-                myObjectOutStream3.writeObject(shapeTripList);
-
-                // closing FileOutputStream and
-                // ObjectOutputStream
-                myObjectOutStream1.close();
-                myFileOutStream1.close();
-                myObjectOutStream2.close();
-                myFileOutStream2.close();
-                myObjectOutStream3.close();
-                myFileOutStream3.close();
-            }
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                FileOutputStream myFileOutStream1
+//                        = new FileOutputStream(shapeGridResource);
+//                FileOutputStream myFileOutStream2
+//                        = new FileOutputStream(gridShapeFile);
+//                FileOutputStream myFileOutStream3
+//                        = new FileOutputStream(shapeTripFile);
+//
+//                ObjectOutputStream myObjectOutStream1
+//                        = new ObjectOutputStream(myFileOutStream1);
+//                ObjectOutputStream myObjectOutStream2
+//                        = new ObjectOutputStream(myFileOutStream2);
+//                ObjectOutputStream myObjectOutStream3
+//                        = new ObjectOutputStream(myFileOutStream3);
+//
+//                myObjectOutStream1.writeObject(shapeGridList);
+//                myObjectOutStream2.writeObject(gridShapeList);
+//                myObjectOutStream3.writeObject(shapeTripList);
+//
+//                // closing FileOutputStream and
+//                // ObjectOutputStream
+//                myObjectOutStream1.close();
+//                myFileOutStream1.close();
+//                myObjectOutStream2.close();
+//                myFileOutStream2.close();
+//                myObjectOutStream3.close();
+//                myFileOutStream3.close();
+//            }
+//            catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
             Long endTime1 = System.currentTimeMillis();
             System.out.println("=============================");
@@ -254,15 +243,18 @@ public class ShapeIndex {
 
         HashMap<ShapeId, Double> shapeSimMap = new HashMap<>();
 
-//        List<ShapeId> topShapes = shapeGridList.entrySet().stream().filter(entry -> shapeCandidates.contains(entry.getKey())).sorted((a, b) -> getGridSimilarity(a.getValue(), userPassedGrids) >= getGridSimilarity(b.getValue(), userPassedGrids) ? -1 : 1).limit(k).map(Map.Entry::getKey).collect(Collectors.toList());
         List<ShapeId> topShapes = shapeGridList.entrySet().stream().filter(entry -> shapeCandidates.contains(entry.getKey())).map(Map.Entry::getKey).collect(Collectors.toList());
         Collections.sort(topShapes, new Comparator<ShapeId>() {
             @Override
             public int compare(ShapeId a, ShapeId b) { // 从大到小
                 Double t = getGridSimilarity(shapeGridList.get(a), userPassedGrids) - getGridSimilarity(shapeGridList.get(b), userPassedGrids);
                 int flag = -1;
-                if (t < 0) flag = 1;
-                if (t == 0) flag = 0;
+                if (t < 0) {
+                    flag = 1;
+                }
+                if (t == 0) {
+                    flag = 0;
+                }
                 return flag;
             }
         });
@@ -274,9 +266,9 @@ public class ShapeIndex {
 
         System.out.println("=============================");
 
-        System.out.println("[SHAPEINDEX] " + shapeGridList.get(userShapeId));
-        System.out.println("[SHAPEINDEX] " + shapeSimMap);
-        System.out.println("[SHAPEINDEX] " + topShapes);
+        //System.out.println("[SHAPEINDEX] " + shapeGridList.get(userShapeId));
+        //System.out.println("[SHAPEINDEX] " + shapeSimMap);
+        //System.out.println("[SHAPEINDEX] " + topShapes);
         if (topShapes.size() >= k) {
             return Lists.newArrayList(topShapes.subList(0, k));
         } else {
@@ -285,16 +277,17 @@ public class ShapeIndex {
 
     }
 
-    //    public double getGridSimilarity(ArrayList<GridId> grids1, ArrayList<GridId> grids2, int theta) {
     public double getGridSimilarity(ArrayList<GridId> grids1, ArrayList<GridId> grids2) {
         if (grids1 == null || grids2 == null || grids1.size() == 0 || grids2.size() == 0) {
             return 0;
         }
 
-        int[][] dp = new int[grids1.size()][grids2.size()]; // dp数组
-        int maxSimilarity = 0; // 相似度
+        int[][] dp = new int[grids1.size()][grids2.size()];
+        int maxSimilarity = 0;
 
-        if (grids1.get(0).equals(grids2.get(0))) dp[0][0] = 1;
+        if (grids1.get(0).equals(grids2.get(0))) {
+            dp[0][0] = 1;
+        }
 
         for (int i = 1; i < grids1.size(); i++) {
             if (grids1.get(i).equals(grids2.get(0))) {
@@ -330,7 +323,7 @@ public class ShapeIndex {
         }
 
         maxSimilarity = dp[grids1.size() - 1][grids2.size() - 1];
-//        System.out.println("两条轨迹的相似度为：" + maxSimilarity);
+
         return maxSimilarity;
     }
 
@@ -341,6 +334,13 @@ public class ShapeIndex {
         for (ShapeId shapeId : topKShapes) {
             tripIds.addAll(shapeTripList.get(shapeId));
         }
+        //test use
+//        HashSet<TripId> all=new HashSet<>();
+//        for(ArrayList<TripId> idls:shapeTripList.values()){
+//            for(int i=0;i<idls.size();i++){
+//                all.add(idls.get(i));
+//            }
+//        }
 
         List<TripId> tripIds1 = tripIds.stream().distinct().collect(Collectors.toList());
         return Lists.newArrayList(tripIds1);

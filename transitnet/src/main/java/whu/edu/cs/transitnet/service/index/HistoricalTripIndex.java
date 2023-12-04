@@ -3,6 +3,8 @@ package whu.edu.cs.transitnet.service.index;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import whu.edu.cs.transitnet.dao.RealTimeDataDao;
 import whu.edu.cs.transitnet.pojo.RealTimePointEntity;
@@ -53,6 +55,8 @@ public class HistoricalTripIndex {
     @PostConstruct
     public void init() throws ParseException {
 
+        // 不要删除这段代码
+        // 是否注释掉等同于是否进行索引构建
 //        if(!indexEnable) {
 //            System.out.println("[HISTORICALTRIPINDEX] Index is not enabled, skipped.");
 //            return;
@@ -77,7 +81,6 @@ public class HistoricalTripIndex {
         // 2. 再根据 dateTime 和 tripId 筛选出每个 tripId 在 dateTime 当天的所有轨迹点 【按时间升序】
         System.out.println("=============================");
         System.out.println("[HISTORICALTRIPINDEX] number of tripIds: " + tripIdsByDate.size());
-//        int num = tripIdsByDate.size();
         int num = 11;
         for (int i = 0; i < num; i++) {
             System.out.println("[HISTORICALTRIPINDEX] number of scanned tripIds: " + (i + 1));
@@ -85,7 +88,6 @@ public class HistoricalTripIndex {
             String tripId = tripIdsByDate.get(i);
             ArrayList<CubeId> cubeIds = new ArrayList<>();
 
-//            List<RealTimeDataEntity> realTimeDataEntityList = realTimeDataDao.findAllPointsByTripIdByTimeSpan(tripId, startTime, endTime);
             List<RealTimePointEntity> realTimePointEntityList = realTimeDataDao.findAllSimplePointsByTripIdByTimeSpan(tripId, startTime, endTime);
 
             // List 转 ArrayList，构造 tripPointList
@@ -94,7 +96,6 @@ public class HistoricalTripIndex {
             System.out.println("[HISTORICALTRIPINDEX] number of points: " + realTimePointEntityList.size());
 
             for (int j = 0; j < realTimePointEntityList.size(); j++) {
-//                System.out.println("[HISTORICALTRIPINDEX] number of scanned points: " + (j + 1));
 
                 double lat = realTimePointEntityList.get(j).getLat();
                 double lon = realTimePointEntityList.get(j).getLon();
@@ -106,7 +107,9 @@ public class HistoricalTripIndex {
 
                 // 注意 encodecube 里面传的是年月日时分秒
                 CubeId cubeId = encodeService.encodeCube(lat, lon, time);
-                if(cubeIds.isEmpty() || cubeIds.lastIndexOf(cubeId) != (cubeIds.size() - 1)) cubeIds.add(cubeId);
+                if(cubeIds.isEmpty() || cubeIds.lastIndexOf(cubeId) != (cubeIds.size() - 1)) {
+                    cubeIds.add(cubeId);
+                }
             }
 
             // 构造 tripCubeList
@@ -118,9 +121,10 @@ public class HistoricalTripIndex {
     public void tripPointListSerializationAndDeserialization(String startTime, String endTime) throws ParseException {
         String date = getDateFromTime(startTime);
 
-        File dateTripPointFile = new File("./src/main/" + date + " TPList.txt");
+        //File dateTripPointFile = new File("src/main/resources/indexFiles/2023-05-20 TPList.txt");
+        Resource tripPointResource = new ClassPathResource("indexFiles/2023-05-20 TPList.txt");
 
-        if(!dateTripPointFile.exists()) {
+        if(!tripPointResource.exists()) {
             System.out.println("=============================");
             System.out.println("[HISTORICALTRIPINDEX] dateTripPointFile Not Exists... Start serializing TCList...");
 
@@ -133,23 +137,23 @@ public class HistoricalTripIndex {
 
             Long startTime2 = System.currentTimeMillis();
             // try catch block
-            try {
-                FileOutputStream myFileOutStream
-                        = new FileOutputStream(dateTripPointFile);
-
-                ObjectOutputStream myObjectOutStream
-                        = new ObjectOutputStream(myFileOutStream);
-
-                myObjectOutStream.writeObject(tripPointList);
-
-                // closing FileOutputStream and
-                // ObjectOutputStream
-                myObjectOutStream.close();
-                myFileOutStream.close();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                FileOutputStream myFileOutStream
+//                        = new FileOutputStream(dateTripPointFile);
+//
+//                ObjectOutputStream myObjectOutStream
+//                        = new ObjectOutputStream(myFileOutStream);
+//
+//                myObjectOutStream.writeObject(tripPointList);
+//
+//                // closing FileOutputStream and
+//                // ObjectOutputStream
+//                myObjectOutStream.close();
+//                myFileOutStream.close();
+//            }
+//            catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
             Long endTime2 = System.currentTimeMillis();
             System.out.println("[HISTORICALTRIPINDEX] serialization time: " + (endTime2 - startTime2) / 1000 + "s");
@@ -164,17 +168,18 @@ public class HistoricalTripIndex {
 
         Long starttime = System.currentTimeMillis();
         try {
-            FileInputStream fileInput = new FileInputStream(
-                    dateTripPointFile);
+//            FileInputStream fileInput = new FileInputStream(
+//                    dateTripPointFile);
+            InputStream tripPointStream = tripPointResource.getInputStream();
 
 
             ObjectInputStream objectInput
-                    = new ObjectInputStream(fileInput);
+                    = new ObjectInputStream(tripPointStream);
 
             tripPointList = (HashMap)objectInput.readObject();
 
             objectInput.close();
-            fileInput.close();
+            tripPointStream.close();
         }
         catch (IOException obj1) {
             obj1.printStackTrace();
@@ -211,9 +216,10 @@ public class HistoricalTripIndex {
         String date = getDateFromTime(startTime);
 
         int resolution = hytraEngineManager.getParams().getResolution();
-        File dateTripCubeFile = new File("./src/main/" + date + " TCList_" + resolution + ".txt");
+//        File dateTripCubeFile = new File("src/main/resources/indexFiles/2023-05-20 TCList_6.txt");
+        Resource tripCubeResource = new ClassPathResource("indexFiles/2023-05-20 TCList_6.txt");
 
-        if(!dateTripCubeFile.exists()) {
+        if(!tripCubeResource.exists()) {
             System.out.println("=============================");
             System.out.println("[HISTORICALTRIPINDEX] dateTripCubeFile Not Exists... Start serializing TCList...");
 
@@ -226,23 +232,23 @@ public class HistoricalTripIndex {
 
             Long startTime2 = System.currentTimeMillis();
             // try catch block
-            try {
-                FileOutputStream myFileOutStream
-                        = new FileOutputStream(dateTripCubeFile);
-
-                ObjectOutputStream myObjectOutStream
-                        = new ObjectOutputStream(myFileOutStream);
-
-                myObjectOutStream.writeObject(tripCubeList);
-
-                // closing FileOutputStream and
-                // ObjectOutputStream
-                myObjectOutStream.close();
-                myFileOutStream.close();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                FileOutputStream myFileOutStream
+//                        = new FileOutputStream(dateTripCubeFile);
+//
+//                ObjectOutputStream myObjectOutStream
+//                        = new ObjectOutputStream(myFileOutStream);
+//
+//                myObjectOutStream.writeObject(tripCubeList);
+//
+//                // closing FileOutputStream and
+//                // ObjectOutputStream
+//                myObjectOutStream.close();
+//                myFileOutStream.close();
+//            }
+//            catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
             Long endTime2 = System.currentTimeMillis();
             System.out.println("[HISTORICALTRIPINDEX] serialization time: " + (endTime2 - startTime2) / 1000 + "s");
@@ -257,17 +263,17 @@ public class HistoricalTripIndex {
 
         Long starttime = System.currentTimeMillis();
         try {
-            FileInputStream fileInput = new FileInputStream(
-                    dateTripCubeFile);
-
+//            FileInputStream fileInput = new FileInputStream(
+//                    dateTripCubeFile);
+            InputStream tripCubeStream = tripCubeResource.getInputStream();
 
             ObjectInputStream objectInput
-                    = new ObjectInputStream(fileInput);
+                    = new ObjectInputStream(tripCubeStream);
 
             tripCubeList = (HashMap)objectInput.readObject();
 
             objectInput.close();
-            fileInput.close();
+            tripCubeStream.close();
         }
         catch (IOException obj1) {
             obj1.printStackTrace();
@@ -305,11 +311,11 @@ public class HistoricalTripIndex {
 
 
         int resolution = hytraEngineManager.getParams().getResolution();
-        File dateCubeTripFile = new File("./src/main/" + date + " CTList_" + resolution + ".txt");
+//        File dateCubeTripFile = new File("src/main/resources/indexFiles/2023-05-20 CTList_6.txt");
+        Resource cubeTripResource = new ClassPathResource("indexFiles/2023-05-20 CTList_6.txt");
 
 
-
-        if(!dateCubeTripFile.exists()) {
+        if(!cubeTripResource.exists()) {
             System.out.println("=============================");
             System.out.println("[HISTORICALTRIPINDEX] dateCubeTripFile Not Exists... Start serializing CTList...");
 
@@ -335,23 +341,23 @@ public class HistoricalTripIndex {
 
             Long startTime2 = System.currentTimeMillis();
             // try catch block
-            try {
-                FileOutputStream myFileOutStream
-                        = new FileOutputStream(dateCubeTripFile);
-
-                ObjectOutputStream myObjectOutStream
-                        = new ObjectOutputStream(myFileOutStream);
-
-                myObjectOutStream.writeObject(cubeTripList);
-
-                // closing FileOutputStream and
-                // ObjectOutputStream
-                myObjectOutStream.close();
-                myFileOutStream.close();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                FileOutputStream myFileOutStream
+//                        = new FileOutputStream(dateCubeTripFile);
+//
+//                ObjectOutputStream myObjectOutStream
+//                        = new ObjectOutputStream(myFileOutStream);
+//
+//                myObjectOutStream.writeObject(cubeTripList);
+//
+//                // closing FileOutputStream and
+//                // ObjectOutputStream
+//                myObjectOutStream.close();
+//                myFileOutStream.close();
+//            }
+//            catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
             Long endTime2 = System.currentTimeMillis();
             System.out.println("[HISTORICALTRIPINDEX] serialization time: " + (endTime2 - startTime2) / 1000 + "s");
@@ -366,17 +372,17 @@ public class HistoricalTripIndex {
 
         Long starttime = System.currentTimeMillis();
         try {
-            FileInputStream fileInput = new FileInputStream(
-                    dateCubeTripFile);
-
+//            FileInputStream fileInput = new FileInputStream(
+//                    dateCubeTripFile);
+            InputStream cubeTripStream = cubeTripResource.getInputStream();
 
             ObjectInputStream objectInput
-                    = new ObjectInputStream(fileInput);
+                    = new ObjectInputStream(cubeTripStream);
 
             cubeTripList = (HashMap)objectInput.readObject();
 
             objectInput.close();
-            fileInput.close();
+            cubeTripStream.close();
         }
         catch (IOException obj1) {
             obj1.printStackTrace();
@@ -397,22 +403,9 @@ public class HistoricalTripIndex {
         Set set = cubeTripList.entrySet();
         Iterator iterator = set.iterator();
 
-
-
-//        while (iterator.hasNext()) {
-//            Map.Entry entry = (Map.Entry)iterator.next();
-//
-//            System.out.print("key : " + entry.getKey()
-//                    + " & Value : ");
-//            System.out.println(entry.getValue());
-//        }
-
         int n5 = 0, n10 = 0, n20 = 0, n30 = 0, n40 = 0, n = 0;
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry)iterator.next();
-
-//            System.out.print("key : " + entry.getKey()
-//                    + " & Value : ");
 
             int size = cubeTripList.get(entry.getKey()).size();
             if(size <= 5) {
@@ -441,9 +434,10 @@ public class HistoricalTripIndex {
 
     public void hashcodeTripListSerializationAndDeserilization(String date) throws ParseException {
 
-        File hashcodeTripFile = new File("./src/main/" + date + " hashcodeTripList.txt");
+//        File hashcodeTripFile = new File("src/main/resources/indexFiles/2023-05-20 hashcodeTripList.txt");
+        Resource hashTripResource = new ClassPathResource("indexFiles/2023-05-20 hashcodeTripList.txt");
 
-        if(!hashcodeTripFile.exists()) {
+        if(!hashTripResource.exists()) {
             System.out.println("=============================");
             System.out.println("[HISTORICALTRIPINDEX] File Not Exists... Start serializing CTList...");
 
@@ -453,22 +447,22 @@ public class HistoricalTripIndex {
 
             Long startTime2 = System.currentTimeMillis();
             // try catch block
-            try {
-                FileOutputStream myFileOutStream
-                        = new FileOutputStream(hashcodeTripFile);
-
-                ObjectOutputStream myObjectOutStream
-                        = new ObjectOutputStream(myFileOutStream);
-
-                myObjectOutStream.writeObject(hashcodeTripList);
-
-                // closing FileOutputStream and
-                // ObjectOutputStream
-                myObjectOutStream.close();
-                myFileOutStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                FileOutputStream myFileOutStream
+//                        = new FileOutputStream(hashcodeTripFile);
+//
+//                ObjectOutputStream myObjectOutStream
+//                        = new ObjectOutputStream(myFileOutStream);
+//
+//                myObjectOutStream.writeObject(hashcodeTripList);
+//
+//                // closing FileOutputStream and
+//                // ObjectOutputStream
+//                myObjectOutStream.close();
+//                myFileOutStream.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
             Long endTime2 = System.currentTimeMillis();
             System.out.println("[HISTORICALTRIPINDEX] serialization time: " + (endTime2 - startTime2) / 1000 + "s");
@@ -476,16 +470,16 @@ public class HistoricalTripIndex {
 
         Long starttime = System.currentTimeMillis();
         try {
-            FileInputStream fileInput = new FileInputStream(hashcodeTripFile);
-
+//            FileInputStream hashTripStream = new FileInputStream(hashTripResource);
+            InputStream hashTripStream = hashTripResource.getInputStream();
 
             ObjectInputStream objectInput
-                    = new ObjectInputStream(fileInput);
+                    = new ObjectInputStream(hashTripStream);
 
             hashcodeTripList = (HashMap)objectInput.readObject();
 
             objectInput.close();
-            fileInput.close();
+            hashTripStream.close();
         }
         catch (IOException obj1) {
             obj1.printStackTrace();

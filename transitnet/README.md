@@ -34,3 +34,9 @@ Run the java application:
  java -jar -Dspring.profiles.active=dev target/transitnet-0.0.1-SNAPSHOT-execute.jar 
 ```
 > The default value for `-Dspring.profiles.active` is `dev`. You only need to indicate this property to `prod` on production environment.
+
+
+## Notice for database
+
+Online configuration use oceanbase as backend database. On your local machine, you don't have to, and can use a mysql database server instead.
+If you really want to use it, put the `lib/oceanbase/oceanbase-client-1.1.5.jar` into `$PROJECT_ROOT$/../lib/oceanbase/` directory so that our project can import it.

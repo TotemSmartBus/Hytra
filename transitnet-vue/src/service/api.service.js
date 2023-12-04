@@ -1,6 +1,5 @@
 //引入刚刚的配置好的axios拦截器
 import axios from '@/service/interceptors.service'
-import VueAxios from 'vue-axios'
 
 const ApiService = {
   //初始化方法用vue-axios组件
@@ -10,11 +9,11 @@ const ApiService = {
   //   Vue.axios.defaults.baseURL = ''
   // },
   init() {
-    axios.defaults.baseURL = 'http://sheng.whu.edu.cn/bus/api'
-    // axios.defaults.baseURL = process.env.VUE_APP_SERVER_ADDR
+    axios.defaults.baseURL = "http://localhost:8090/api"/*import.meta.env.SERVER_ADDR*/
+    // console.log(axios.defaults.baseURL)
   },
   //创建不同的网络请求方法
-  get(resource, slug = '', params) {
+  get(resource, slug = '', params) {s
     return axios.get(`${resource}/${slug}`, { params }).catch(error => {
       throw error.response
     })
