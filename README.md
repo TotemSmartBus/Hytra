@@ -24,7 +24,7 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 * Bus trajectory storage based on an LSM-tree-extended architecture called *Adjacency-based Compaction Tree* (ACT).
   * Key-value store.
   * Adjacency-based compaction policy.
-  * Optimized storage archtecure.
+  * Optimized storage architecture.
 * Fast bus trajectory queries with
   * Enriched posting lists.
   * A search operator *SweepLine*.
