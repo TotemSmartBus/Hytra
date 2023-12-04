@@ -15,7 +15,7 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 
 - Hytra-Interface is a dependency project for the underlying LSM-tree index used by transitnet. It needs to be packaged into a jar file and placed under the lib folder of transitnet.
 - Hytra-Interface and Hytra-LSM use socket to communicate.
-- Transitnet provides underlying services to transitnet-vue, and transitnet-vue renders the interface to realize real-time bus trajectory data visualization.
+- Transitnet provides underlying services to transitnet-vue, and transitnet-vue renders the interface to realize real-time bus trajectory data visualization and support interactive queries for users.
 
 <!--Each project has its own .md file that describes their specific content and use.-->
 
