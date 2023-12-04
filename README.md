@@ -34,7 +34,7 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 
 ## Supported Queries
 
-Hytra is able to efficiently answer four typical types of queries now:
+Hytra is able to efficiently answer four typical types of queries over trajectory data now:
 
 * Real-time range query
 * Historical range query
