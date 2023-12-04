@@ -14,10 +14,10 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 ![image-20230802181152370](https://github.com/TotemSmartBus/Hytra/blob/main/relationships.png)
 
 - Hytra-Interface is a dependency project for the underlying LSM-tree index used by transitnet. It needs to be packaged into a jar file and placed under the lib folder of transitnet.
-- Hytra-Interface and Hytra-LSM use socket to communicate.
+- Hytra-Interface and Hytra-LSM use sockets to communicate.
 - Transitnet provides underlying services to transitnet-vue, and transitnet-vue renders the interface to realize real-time bus trajectory data visualization and support interactive queries for users.
 
-<!--Each project has its own .md file that describes their specific content and use.-->
+<!--Each project has its own .md file that describes its specific content and use.-->
 
 ## Features of Hytra
 
@@ -51,15 +51,15 @@ Link of the bus trajectory visualization platform: http://sheng.whu.edu.cn/bus/
 
 ### 0. Download the NYC Dataset
 
-Our trajectory datasets collected at New York City and Sydney at available. Please download them at https://drive.google.com/drive/folders/1lWYpBT27IudvCVryDTGZPHn2XUIXjWBl?usp=drive_link, import them into MySQL database, and configure the *application-dev.properties* file in the *resources* directory. 
+Our trajectory datasets collected in New York City and Sydney at available. Please download them at https://drive.google.com/drive/folders/1lWYpBT27IudvCVryDTGZPHn2XUIXjWBl?usp=drive_link, import them into MySQL database, and configure the *application-dev.properties* file in the *resources* directory. 
 
 ### 1. Dependencies
 
-We manage the dependent libraries with Maven. You can easily install those required softwares in pom.xml file.
+We manage the dependent libraries with Maven. You can easily install those required software in pom.xml file.
 
 ### 2. Running the sample program
 
-We provide a use case for the hishtorical range query. The `ExpTest()` method is in the `HistoricalRangeExpTest_merge` class in the transitnet project.
+We provide a use case for the historical range query. The `ExpTest()` method is in the `HistoricalRangeExpTest_merge` class in the transitnet project.
 
 ```java
 //1. Set the parameters.     
@@ -114,7 +114,7 @@ historicalKNNExpService.setup(param.getPoints(),k);
 historicalKNNExpService.getTopKTrips();
 ```
 
-The historical kNN query is used to retrive the k highest ranked trajectories based on the similarity to the query trajectory. 
+The historical kNN query is used to retrieve the k highest ranked trajectories based on the similarity to the query trajectory. 
 
 ## Future Directions
 
