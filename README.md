@@ -4,10 +4,10 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 
 ## Repository Overview
 
-- Hytra-Interface: the Global Encoding Engine of Hytra, including Real-time Range Query and Historical Range Query of the Unified Search Engine.
+- Hytra-Interface: the Global Encoding Engine of Hytra.
 - Hytra-LSM: the Hybrid Storage Engine of Hytra.
 - transitnet-vue: the front-end of transit network visualization platform.
-- transitnet: the back-end of transit network visualization platform, including Real-time kNN Query and Historical kNN Query of the Unified Search Engine.
+- transitnet: the back-end of transit network visualization platform, including Real-time Range Query, Historical Range Query, Real-time kNN Query, and Historical kNN Query of the Unified Search Engine.
 
 ## Relationships Between Projects
 
@@ -15,7 +15,7 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 
 - Hytra-Interface is a dependency project for the underlying LSM-tree index used by transitnet. It needs to be packaged into a jar file and placed under the lib folder of transitnet.
 - Hytra-Interface and Hytra-LSM use socket to communicate.
-- Transitner provides underlying services to transitnet-vue, and tansitnet-vue renders the interface to realize real-time bus trajectory data visualization.
+- Transitnet provides underlying services to transitnet-vue, and transitnet-vue renders the interface to realize real-time bus trajectory data visualization.
 
 <!--Each project has its own .md file that describes their specific content and use.-->
 
@@ -51,7 +51,7 @@ Link of the bus trajectory visualization platform: http://sheng.whu.edu.cn/bus/
 
 ### 0. Download the NYC Dataset
 
-Our trajectory dataset collected at New York City and Sydney is available.  Please download it at https://drive.google.com/drive/folders/1lWYpBT27IudvCVryDTGZPHn2XUIXjWBl?usp=drive_link and put it in the root directory of the Hytra-interface project. 
+Our trajectory dataset collected at New York City and Sydney is available. Please download it at https://drive.google.com/drive/folders/1lWYpBT27IudvCVryDTGZPHn2XUIXjWBl?usp=drive_link and put it in the root directory of the Hytra-interface project. 
 
 ### 1. Dependencies
 
