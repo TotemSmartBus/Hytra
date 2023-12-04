@@ -1,8 +1,7 @@
 package edu.whu.hyk;
 
-import com.github.davidmoten.rtree.RTree;
 import edu.whu.hyk.encoding.Encoder;
-import edu.whu.hyk.exp.*;
+import edu.whu.hyk.oldexp.*;
 import edu.whu.hyk.merge.Generator;
 import edu.whu.hyk.model.Point;
 import edu.whu.hyk.model.PostingList;
@@ -13,8 +12,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.*;
 import java.util.*;
-
-import static edu.whu.hyk.merge.Generator.planes;
 
 public class Engine {
     public static HashMap<String, Object> Params = new HashMap();

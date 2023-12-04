@@ -2,10 +2,8 @@ package edu.whu.hytra;
 
 import edu.whu.hyk.Engine;
 import edu.whu.hyk.encoding.Encoder;
-import edu.whu.hyk.exp.RealtimekNN;
 import edu.whu.hyk.merge.Generator;
 import edu.whu.hyk.model.Point;
-import edu.whu.hyk.model.PostingList;
 import edu.whu.hytra.entity.Vehicle;
 
 import java.text.SimpleDateFormat;
@@ -58,21 +56,6 @@ public class EngineFactory {
 
     public void clearIndex() {
         Engine.clear();
-    }
-    /**
-     * 对实时数据进行搜索，仅搜索 grid 上的数据,搜索到的是 PointID
-     *
-     * @param lat
-     * @param lon
-     * @param k   最近的 k 个单位
-     * @return PointID List
-     */
-    public List<Integer> searchRealtime(double lat, double lon, int k) {
-        int gid = Encoder.encodeGrid(lat, lon);
-        Point query = new Point(lat, lon);
-        RealtimekNN.setup(Engine.trajDataBase, Engine.Params, query, k);
-        // 使用 hytra 方法去搜索
-        return RealtimekNN.hytra(PostingList.GT);
     }
 
 }

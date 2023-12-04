@@ -51,14 +51,14 @@ public class Decoder extends Encoder{
         }
         String bitsI = "", bitsJ = "",bitsK = "";
         for(int i = 0; i < bits.length(); i++){
-            if((i % 3)== 0) {bitsK += bits.charAt(i);}
+            if((i % 3)== 0) {bitsI += bits.charAt(i);}
             if((i % 3) == 1) {bitsJ += bits.charAt(i);}
-            if((i % 3) == 2) {bitsI += bits.charAt(i);}
+            if((i % 3) == 2) {bitsK += bits.charAt(i);}
         }
         int I = bitToint(bitsI),J = bitToint(bitsJ),K = bitToint(bitsK);
-        int i1 = I * (int) Math.pow(8,level), i2 = i1 + (int) Math.pow(8,level) - 1,
-                j1 = J * (int) Math.pow(8,level), j2 = j1 + (int) Math.pow(8,level) - 1,
-                k1 = K * (int) Math.pow(8,level), k2 = k1 + (int) Math.pow(8,level) - 1;
+        int i1 = I * (int) Math.pow(2,level), i2 = i1 + (int) Math.pow(2,level) - 1,
+                j1 = J * (int) Math.pow(2,level), j2 = j1 + (int) Math.pow(2,level) - 1,
+                k1 = K * (int) Math.pow(2,level), k2 = k1 + (int) Math.pow(2,level) - 1;
 
         return new int[]{i1,i2,j1,j2,k1,k2};
 
