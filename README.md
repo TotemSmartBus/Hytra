@@ -29,7 +29,7 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
   * Enriched posting lists.
   * A search operator *SweepLine*.
   * A unified similarity measure *LOGC*.
-  * A *shape-trip-schedule* three-level index
+  * A *shape-trip-schedule* three-level index.
 * Bus trajectory visualization in New York City
 
 ## Supported Queries
