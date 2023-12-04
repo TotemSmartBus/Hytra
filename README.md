@@ -51,7 +51,7 @@ Link of the bus trajectory visualization platform: http://sheng.whu.edu.cn/bus/
 
 ### 0. Download the NYC Dataset
 
-Our trajectory dataset collected at New York City and Sydney is available. Please download it at https://drive.google.com/drive/folders/1lWYpBT27IudvCVryDTGZPHn2XUIXjWBl?usp=drive_link and put it in the root directory of the Hytra-interface project. 
+Our trajectory datasets collected at New York City and Sydney at available. Please download them at https://drive.google.com/drive/folders/1lWYpBT27IudvCVryDTGZPHn2XUIXjWBl?usp=drive_link, import them into MySQL database, and configure the *application-dev.properties* file in the *resources* directory. 
 
 ### 1. Dependencies
 
@@ -59,58 +59,49 @@ We manage the dependent libraries with Maven. You can easily install those requi
 
 ### 2. Running the sample program
 
-We provide a use case for Real-time Range Query. The `main()` method is in the `Engine` class in the Hytra-Interface project.
+We provide a use case for the hishtorical range query. The `ExpTest()` method is in the `HistoricalRangeExpTest_merge` class in the transitnet project.
 
 ```java
 //1. Set the parameters.     
-Params.put("city","nyc");     
-Params.put("spatialDomain", new double[]{40.502873,-74.252339,40.93372,-73.701241});        
-Params.put("resolution",6);        
-Params.put("separator", "@");        
-Params.put("epsilon", 30);        
-Params.put("dataSize",(int) 1.2e7);
+double []ps={40.8100, -73.9200, 40.8367, -73.8840};
+String date="2023-05-20";
+historicalrangeExpService.setup(ps,date);
 
-//2. Initialize the encoder and the generator with parameters.
- Encoder.setup(Params);
-Generator.setup(Params);
-
-//3. Execute query.
-buildTrajDB((String) Params.get("city"), "jun");
-RealtimeRange.setup(trajDataBase,Params,3000);
-RealtimeRange.hytra(PostingList.GT,PostingList.TlP);
+//2. Execute query.
+historicalrangeExpService.historaical_range_search();
 ```
 
-Hytra-Interface provides simple APIs for query processing.
+Transitnet provides simple APIs for query processing.
 
-* `buildTrajDB()` loads/builds the index structure of a dataset, encapsulated by `PostingList` class.
-* `RealtimeRange.setup()` initializes the query paraemeters, including the length of the spatial range (3000).
-* `RealtimeRange.hytra()` invokes API of a real-time range query. APIs for other supported query types are described in the next section.
+* `historicalrangeExpService.setup()` initializes the query parameters, including the spatial range and the specific date.
+* `historicalrangeExpService.historaical_range_search()` encapsulates the process of merging cubes, updating indexes, generating sweeplines, and executing queries.
 
 ### Query Types
 
 #### 1) Real-time range query
 
 ```java
-HistoricalRange.generateQr(params, s_length, t_length);
-HistoricalRange.hytra(planes);
+RealtimeRangeService.setup(temp);
+RealtimeRangeService.hytra();
 ```
 
-The historical range query is used to retrive trajectories passing through a rectangular area and a period of time.
+The historical range query is used to retrieve trajectories passing through a rectangular area at the current time.
 
 #### 2) Historical range query
 
 ```java
-HistoricalRange.generateQr(params, s_length, t_length);
-HistoricalRange.hytra(planes);
+historicalrangeExpService.setup(ps,date);
+historicalrangeExpService.historaical_range_search();
 ```
 
-The historical range query is used to retrive trajectories passing through a rectangular area in a period of time.
+The historical range query is used to retrieve trajectories passing through a rectangular area in a period of time.
 
 #### 3) Real-time kNN query
 
 ```java
-int k = 20;
-realtimeKNNExpService.getTopKTrips(k);
+QueryKnnRtParam param=new QueryKnnRtParam(ps);
+realtimeKNNExpService.setup(param.getPoints(),k,backdate);
+realtimeKNNExpService.getTopKTrips();
 ```
 
 The real-time kNN query is used to retrieve the k highest ranked trajectories based on the similarity to the query trajectory. 
@@ -118,8 +109,9 @@ The real-time kNN query is used to retrieve the k highest ranked trajectories ba
 #### 4) Historical kNN query
 
 ```java
-int k = 10;
-historicalKNNExpService.getTopKTrips(k);
+QueryKnnHisParam param=new QueryKnnHisParam(ps,ts);
+historicalKNNExpService.setup(param.getPoints(),k);
+historicalKNNExpService.getTopKTrips();
 ```
 
 The historical kNN query is used to retrive the k highest ranked trajectories based on the similarity to the query trajectory. 
