@@ -4,10 +4,10 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 
 ## Repository Overview
 
-- Hytra-Interface: the Global Encoding Engine of Hytra.
-- Hytra-LSM: the Hybrid Storage Engine of Hytra.
-- transitnet-vue: the front-end of transit network visualization platform.
-- transitnet: the back-end of transit network visualization platform, including Real-time Range Query, Historical Range Query, Real-time kNN Query, and Historical kNN Query of the Unified Search Engine.
+- Hytra-Interface: the global encoding engine of Hytra.
+- Hytra-LSM: the hybrid storage engine of Hytra.
+- transitnet: the back-end of the real-time bus trajectory data visualization platform, including Real-time Range Query, Historical Range Query, Real-time kNN Query, and Historical kNN Query of the Unified Search Engine.
+- transitnet-vue: the front-end of the real-time bus trajectory data visualization platform.
 
 ## Relationships Between Projects
 
@@ -21,15 +21,15 @@ A Lightweight and Hybrid Framework for Conducting Fast Real-time and Historical 
 
 ## Features of Hytra
 
-* Bus trajectory storage based on an LSM-tree-extended architecture called *Adjacency-based Compaction Tree* (ACT).
+* Trajectory storage based on an LSM-tree-extended architecture called *Adjacency-based Compaction Tree* (ACT).
   * Key-value store.
   * Adjacency-based compaction policy.
   * Optimized storage architecture.
-* Fast bus trajectory queries with
+* Fast trajectory queries with
   * Enriched posting lists.
   * A search operator *SweepLine*.
   * A unified similarity measure *LOGC*.
-  * A *shape-trip-schedule* three-level index.
+  * A *shape-trip-schedule* three-level index for bus trajectory data.
 * Bus trajectory visualization in New York City
 
 ## Supported Queries
