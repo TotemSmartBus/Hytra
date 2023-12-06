@@ -4,9 +4,6 @@ A front-end of transit network visualization platform provides multi-view intera
 > Make sure Node is downloaded.
 ### Git clone
 Clone the front-end project to local
-```
-git clone https://github.com/GuYith/transitnet-vue.git
-```
 ### Install dependencies
 Enter the root directory of the front-end project, and enter the following command.
 ```
@@ -19,6 +16,4 @@ npm install
 ```
 npm run serve
 ```
-Open the http://localhost:8085
 
-![system](pic/system_look.png)
