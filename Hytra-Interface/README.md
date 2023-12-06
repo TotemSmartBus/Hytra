@@ -1,45 +1,43 @@
 # Hytra-Interface
 
-hytra 存储的应用层
+The global encoding engine of Hytra
 
-## 使用方法
+## Usage
+This project is a dependency of the underlying LSM-tree index provided for use by [TransitNet](https://github.com/TotemSmartBus/transitnet). It needs to be packaged as a jar file to be used under the project lib.
 
-本项目是提供给 [TransitNet](https://github.com/TotemSmartBus/transitnet) 使用的底层 LSM-tree 索引的依赖项目。需要打包成
-jar 文件放置在该项目的 lib 下使用。
-
-1. 打包：
+1. Pack
 
 ``` bash
 mvn package
 ```
 
-2. 移动到 TransitNet 项目下
+2. Move to the Transitnet project
 
 ``` bash
 cp target/Hytra-Exp-1.0-SNAPSHOT.jar ${TRANSITNET_ROOT}/lib/
 ```
 
-3. 启动 TransitNet 项目
+3. Launch the TransitNet project
 
-> 参见该项目的 README。
+> See the README for this project.
 
-## 相关代码示例
+## Related Code Samples
 
 >
-摘自 [RealtimeDataIndex.java from TransitNet](https://github.com/TotemSmartBus/transitnet/blob/master/src/main/java/whu/edu/cs/transitnet/service/index/RealtimeDataIndex.java)
+Excerpt from [RealtimeDataIndex.java from TransitNet](https://github.com/TotemSmartBus/transitnet/blob/master/src/main/java/whu/edu/cs/transitnet/service/index/RealtimeDataIndex.java)
 。
 
 ```java
-// 这里使用一个类去管理所有索引相关方法
+// A class is used to manage all index-related methods
 public class RealtimeDataIndex {
 
-    // 向底层查询时仅返回 PID，对应的信息需要 map 回去查找。这里维护一个 hashmap 映射 PID 和 对应点的完整信息。
+    // Only PID is returned when the underlying information is queried. The corresponding information needs to be searched by map. Complete information about a hashmap PID and corresponding points is maintained here.
     private LinkedList<HashMap<Integer, Vehicle>> pointToVehicle = new LinkedList<>();
 
-    // 底层封装的索引 Engine
+    // Index Engine for the underlying package.
     public EngineFactory engineFactory;
 
-    // 默认初始化一些配置信息
+    // Some configuration information is initialized by default.
     public RealtimeDataIndex() {
         EngineParam params = new EngineParam(
                 "nyc",
@@ -52,19 +50,19 @@ public class RealtimeDataIndex {
         engineFactory = new EngineFactory(params);
     }
 
-    // 更新索引
+    // Update index
     public void update(List<Vehicle> list) {
         Thread t = new Thread(new IndexUpdater(list));
         t.start();
     }
 
-    // 在底层索引上进行 kNN 查询，传入的参数为坐标点和 k 的值
+    // A kNN query is performed on the underlying index, and the parameters passed in are the coordinate point and the value of k.
     public List<Vehicle> search(double lat, double lon, int k) {
         List<Integer> pidList = engineFactory.searchRealtime(lat, lon, k);
         List<Vehicle> result = new ArrayList<>(pidList.size());
         HashMap<Integer, Vehicle> newestMap = pointToVehicle.getLast();
         HashMap<Integer, Vehicle> newestButOneMap = pointToVehicle.get(pointToVehicle.size() - 2);
-        // 这里维护最新的 2 个时间分片而不是一个是因为可能在查询的过程中数据已经刷新了，此时则可能在第二最新分片上才能找到数据。
+        // The most recent two time shards are maintained here instead of one, because the data may have been refreshed during the query, in which case the data may be found on the second latest shard.
         for (Integer i : pidList) {
             if (newestMap.containsKey(i)) {
                 result.add(newestMap.get(i));
@@ -77,12 +75,12 @@ public class RealtimeDataIndex {
         return result;
     }
 
-    // 异步更新索引
+    // Asynchronous update index.
     class IndexUpdater implements Runnable {
         private List<edu.whu.hytra.entity.Vehicle> newIndex;
 
         public IndexUpdater(List<Vehicle> newIndex) {
-            // 更新索引时还要维护一下 pid 和原始数据的 map
+            // You also need to maintain the pid and map of the original data when you update the index.
             HashMap<Integer, Vehicle> pointMap = new HashMap<>();
             this.newIndex = newIndex.stream().map(i -> {
                 edu.whu.hytra.entity.Vehicle j = new edu.whu.hytra.entity.Vehicle();
@@ -95,7 +93,7 @@ public class RealtimeDataIndex {
                 return j;
             }).collect(Collectors.toList());
             pointToVehicle.add(pointMap);
-            // 只保存最新 10 个原始时间分片防止内存占用过多
+            // Save only the latest 10 original time shards to prevent excessive memory usage.
             if (pointToVehicle.size() > 10) {
                 pointToVehicle.poll();
             }
